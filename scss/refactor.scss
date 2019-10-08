@@ -14,7 +14,11 @@
   box-shadow: 0 1px 3px 0 rgba(81, 99, 120, 0.1);
   border-color: #d9d9d9 #ccc #b3b3b3;
   @include border-radius($border-radius-default);
+  
   border: 1px solid $border-dark;
+  border: 1px solid $border-dark;
+  border: 1px solid $border-dark;
+
   color: $text-light;
   cursor: pointer;
   text-align: center;
@@ -60,7 +64,7 @@
 
 
 .primary {
-  color: ${({ theme }) => theme.colors.textDark};
+  color: $text-dark;
   border: 1px solid $primary-dark;
   background-color: $primary-dark;
 }

@@ -11,7 +11,7 @@ const read = () => {
 when testing read, don't forget uncomment `read()` 
 
 
-## bug
+## bug -> this has been solved
 ```
 &.danger {
   color: $text-dark;

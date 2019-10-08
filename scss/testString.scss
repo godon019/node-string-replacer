@@ -1,3 +1,5 @@
+
+// colors
 $application-background-light: #ffffff;
 $border-color-dark: #d9d9d9 $border #b3b3b3;
 $poor: #ff7da5;
@@ -6,6 +8,46 @@ $dark-30: what;
 &.danger {
   color: $text-dark;
   border: 1px solid $warm-pink;
-  // has some error
   background-color: $warm-pink;
 }
+
+// components
+// redundant test
+$height-default: 34px;
+$height-default: 34px;
+$height-default: 34px;
+$height-default: 34px;
+
+$height-large: 48px;
+$height-x-large: 64px;
+$height-navbar: 70px;
+$margin-default: 2px;
+$margin-large: 2px;
+$margin-x-large: 2px;
+$font-size-x-small: 10px;
+$font-size-small: 12px;
+$font-size-default: 14px;
+$font-size-large: 16px;
+$font-size-x-large: 18px;
+$font-weight-default: 400;
+$font-weight-large: 500;
+$font-weight-x-large: 500;
+$font-weight-bold-default: 600;
+$font-weight-bold-large: 600;
+$font-weight-bold-x-large: 600;
+$border-radius-default: 4px;
+$border-radius-large: 4px;
+$border-radius-x-large: 6px;
+$box-shadow-default: none;
+$box-shadow-large: 0 2px 4px 0 rgba(81, 99, 120, 0.2);
+$box-shadow-x-large: 0 2px 4px 0 rgba(81, 99, 120, 0.3);
+$transition-default: all 0.18s ease-in-out;
+
+$navbar-height: 70px;
+$navbar-header-font-size: 18px;
+$navbar-header-width: 256px;
+$navbar-header-narrow-width: 200px;
+$navbar-profile-width: 240px;
+
+$dropdown-padding-vertical: 20px;
+$dropdown-item-padding: 0 30px;

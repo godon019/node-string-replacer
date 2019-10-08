@@ -2,6 +2,10 @@
 var fs = require('fs');
 const matchAll = require('string.prototype.matchall');
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 const readColorVars = () => {
   try {
     // copy file path: option cmd c
@@ -20,7 +24,10 @@ const readColorVars = () => {
     // get the matching group of 'm'
     const result = array.map(el => el.groups.m);
     console.log(result);
-    return result;
+    const regexStr = result.map(str => new RegExp(escapeRegExp(str),'g'))
+    console.log(regexStr);
+
+    return regexStr;
 
   } catch (e) {
     console.log('Error:', e.stack);
@@ -45,7 +52,10 @@ const readComponents = () => {
     // get the matching group of 'm'
     const result = array.map(el => el.groups.m);
     console.log(result);
-    return result;
+    const regexStr = result.map(str => new RegExp(escapeRegExp(str),'g'))
+    console.log(regexStr);
+
+    return regexStr;
 
   } catch (e) {
     console.log('Error:', e.stack);

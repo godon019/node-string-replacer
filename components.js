@@ -5,7 +5,8 @@ const { readComponents } = require('./read');
 const _ = require('lodash');
 const replace = require('replace-in-file');
 
-const filesToChange = './scss/refactor.tsx';
+// const filesToChange = './scss/refactor.tsx';
+const filesToChange = './scss/testString.scss';
 // const filesToChange = '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/stylesNew/componentsClass.scss';
 
 const Opt = {

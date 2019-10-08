@@ -6,8 +6,8 @@ const _ = require('lodash');
 //Load the library and specify options
 const replace = require('replace-in-file');
 
-const filesToChange = './scss/refactor.scss';
-// const filesToChange = './scss/testString.scss';
+// const filesToChange = './scss/refactor.scss';
+const filesToChange = './scss/testString.scss';
 // const filesToChange = '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/stylesNew/componentsClass.scss';
 
 
