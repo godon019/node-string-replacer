@@ -1,0 +1,130 @@
+@import '../../styles/mixins';
+@import '../../styles/colors';
+@import '../../styles/components';
+
+.button {
+  height: $height-default;
+  width: 100%;
+  min-width: 80px;
+  padding: 0;
+  border-style: inherit;
+  border-radius: 3px;
+  box-sizing: border-box;
+  background-color: #f3f4f6;
+  box-shadow: 0 1px 3px 0 rgba(81, 99, 120, 0.1);
+  border-color: #d9d9d9 #ccc #b3b3b3;
+  @include border-radius($border-radius-default);
+  border: 1px solid $border-dark;
+  color: $text-light;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  @include user-select-none();
+  transition: $transition-default;
+  margin: $margin-default;
+  outline: 0;
+
+  i {
+    font-size: 14px;
+    position: absolute;
+    left: 16px;
+    line-height: $height-default;
+  }
+
+  span {
+    font-size: $font-size-default;
+    font-weight: $font-weight-default;
+    line-height: $height-default;
+  }
+}
+
+.button:hover:enabled {
+  background-color: #e7eaee;
+  box-shadow: 0 2px 4px 0 rgba(81, 99, 120, 0.2);
+}
+
+.button:active:enabled {
+  background-color: #dbe0e5;
+}
+
+.button:focus:enabled {
+  border: 1px solid $primary-light;
+}
+
+.button:disabled {
+  color: $text-disabled;
+  background-color: $widget-disabled-lighter;
+  border: 1px solid $widget-disabled-light;
+  cursor: default;
+}
+
+
+.primary {
+  color: ${({ theme }) => theme.colors.textDark};
+  border: 1px solid $primary-dark;
+  background-color: $primary-dark;
+}
+
+.primary:hover:enabled {
+  background-color: $primary-darker;
+}
+
+.primary:active:enabled {
+  background-color: $primary-darkest;
+}
+
+.danger {
+  color: $text-dark;
+  border: 1px solid $warm-pink;
+  background-color: $warm-pink;
+}
+
+.danger:hover:enabled {
+  background-color: $warm-pink-darker;
+}
+
+.danger:active:enabled {
+  background-color: $warm-pink-darkest;
+}
+
+.large {
+  height: $height-large;
+  padding: 0;
+  margin: $margin-large;
+  box-shadow: 0 2px 4px 0 rgba(81, 99, 120, 0.1);
+  @include border-radius($border-radius-large);
+
+  i {
+    font-size: 22px;
+    line-height: $height-large;
+  }
+
+  span {
+    font-size: $font-size-large;
+    font-weight: $font-weight-large;
+    line-height: $height-large;
+  }
+}
+
+.large:hover:enabled {
+  box-shadow: 0 4px 6px 0 rgba(81, 99, 120, 0.2);
+}
+
+
+.xLarge {
+  @extend .large;
+  height: $height-x-large;
+  margin: $margin-x-large;
+  @include border-radius($border-radius-x-large);
+
+  i {
+    font-size: 22px;
+    line-height: $height-x-large;
+  }
+
+  span {
+    font-size: $font-size-x-large;
+    font-weight: $font-weight-x-large;
+    line-height: $height-x-large;
+  }
+}

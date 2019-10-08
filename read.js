@@ -1,5 +1,6 @@
 //https://stackabuse.com/read-files-with-node-js/
 var fs = require('fs');
+const matchAll = require('string.prototype.matchall');
 
 const readColorVars = () => {
   try {
@@ -11,7 +12,7 @@ const readColorVars = () => {
 
 
     // group 'm' is the matching group
-    const iter = reference.matchAll(/(?<m>\$(?:[a-z\d]*-*)*)/gm);
+    const iter = matchAll(reference, /(?<m>\$(?:[a-z\d]*-*)*)/gm);
 
     const array = Array.from(iter); // let's turn it into array
     // console.log('array', array);
@@ -36,7 +37,7 @@ const readComponents = () => {
 
 
     // group 'm' is the matching group
-    const iter = reference.matchAll(/(?<m>\$(?:[a-z\d]*-*)*)/gm);
+    const iter = matchAll(reference, /(?<m>\$(?:[a-z\d]*-*)*)/gm);
 
     const array = Array.from(iter); // let's turn it into array
     // console.log('array', array);

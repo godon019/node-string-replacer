@@ -6,15 +6,18 @@ const _ = require('lodash');
 //Load the library and specify options
 const replace = require('replace-in-file');
 
-const files = './scss/refactor.tsx';
-// const files = './scss/testString.scss';
+const filesToChange = './scss/refactor.scss';
+// const filesToChange = './scss/testString.scss';
+// const filesToChange = '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/stylesNew/componentsClass.scss';
 
 
 const Opt = {
-  files: files,
+  files: filesToChange,
   // from: /hey/g,
   from: readColorVars(),
   to: (match) => {
+    // eslint-disable-next-line no-console
+    console.log('match', match);
     const res1 = match.replace('$', '');
     const res2 = _.camelCase(res1);
     const res3 = `\${({ theme }) => theme.colors.${res2}}`
