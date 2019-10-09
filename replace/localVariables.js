@@ -1,22 +1,20 @@
-const readRef = require('../read');
+const { readCmpLayouts } = require('../read');
 const _ = require('lodash');
 const replace = require('replace-in-file');
 
 const filesToChange = '/Users/dongkyun/Documents/Projects/gordonReplace/scss/testString.scss';
-// const filesToChange = './scss/testString.scss';
-// const filesToChange = '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/stylesNew/componentsClass.scss';
 
-module.exports = function runComponents({ path, readRef }) {
+module.exports = function runComponents({ path, refs }) {
   try {
-    console.group('START TO REPLACE COMPONENT(LAYOUT) VARIABLES');
+    console.group('START TO REPLACE LOCAL VARIABLES');
     const replaceResult = replace.sync({
       files: path ? path : filesToChange,
-      from: readRef(),
+      from: refs,
       to: (match) => {
         console.group(`layout`);
         const res1 = match.replace('$', '');
         const res2 = _.camelCase(res1);
-        const res3 = `\${layouts.${res2}}`
+        const res3 = `\${${res2}}`
         console.log(`ori: ${match} \n└-> ${res3}\n`);
         console.groupEnd();
         return res3;
