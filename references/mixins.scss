@@ -1,0 +1,102 @@
+@mixin respond-to($media) {
+  @if $media==mobile {
+    @media only screen and (max-width: 768px) {
+      @content;
+    }
+  }
+}
+
+@mixin chSelect-selector($width, $height) {
+  display: flex;
+  width: $width;
+  height: $height;
+  align-items: center;
+  font-size: 15px;
+}
+
+@mixin chSelect-selector-fixed($width, $height) {
+  display: flex;
+  width: $width;
+  height: $height;
+  border: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+@mixin loader($size, $border-width, $color, $duration) {
+  width: $size;
+  height: $size;
+  border: solid $border-width $color;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: rotate $duration infinite linear;
+  transform-origin: 50% 50%;
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+
+@mixin component-size($size) {
+  height: if($size=='large', $height-large, if($size=='x-large', $height-x-large, $height-default));
+  margin: if($size=='large', $margin-large, if($size=='x-large', $margin-x-large, $margin-default));
+
+  i {
+    line-height: if($size=='large', $height-large, if($size=='x-large', $height-x-large, $height-default));
+  }
+
+  input {
+    font-size: if($size=='large', $font-size-large, if($size=='x-large', $font-size-x-large, $font-size-default));
+    font-weight: if($size=='large', $font-weight-large, if($size=='x-large', $font-weight-x-large, $font-weight-default));
+  }
+}
+
+@mixin component-disabled() {
+  color: $text-disabled;
+
+  input {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+  input::placeholder {
+    color: $text-disabled;
+  }
+}
+
+@mixin component-focused() {
+  border: 1px solid $primary-light;
+}
+
+@mixin font-size($size, $weight, $line-height) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+}
+
+
+@mixin flex($flex) {
+  -webkit-flex: $flex;
+  -ms-flex: $flex;
+  flex: $flex;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin user-select-none() {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

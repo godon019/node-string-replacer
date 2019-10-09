@@ -11,13 +11,29 @@ $dark-30: what;
   background-color: $warm-pink;
 }
 
+// extends
+.what {
+  @extend .large;
+}
+
+.errorPage {
+  @extend %page-index;
+  display: flex;
+}
+
+export const componentInputDefaults = css`
+  @extend %component-defaults;
+`
+
+
+
 // components
 // redundant test
 $height-default: 34px;
 $height-default: 34px;
 $height-default: 34px;
 $height-default: 34px;
-
+// normal test
 $height-large: 48px;
 $height-x-large: 64px;
 $height-navbar: 70px;
@@ -51,3 +67,20 @@ $navbar-profile-width: 240px;
 
 $dropdown-padding-vertical: 20px;
 $dropdown-item-padding: 0 30px;
+
+
+
+
+// mixins
+hey {
+  // this shouldn't be changed
+  border-radius: 30px;
+  // it should be changed
+  @include border-radius($border-radius-default);
+
+  // unwrap second argument test
+  @include border-radius(${bordeRadiusDefault});
+}
+
+// wrap with '' 
+ @include border-radius(0.2em);

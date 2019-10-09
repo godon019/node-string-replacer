@@ -1,0 +1,88 @@
+
+%page-index {
+  height: 100%;
+
+  .centerBox {
+    padding-top: $height-navbar;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+    box-sizing: border-box;
+
+    .title {
+      padding: 122px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .logo {
+        width: 30px;
+        height: 30px;
+        margin: auto;
+      }
+
+      h1 {
+        font-size: 30px;
+        font-weight: 600;
+        text-align: center;
+        color: $text-light;
+      }
+    }
+
+    .body {
+      margin-top: 40px
+    }
+  }
+}
+
+%component-defaults {
+  height: $height-default;
+  width: 100%;
+  min-width: 100px;
+  background-color: $widget-lightest;
+  border: 1px solid $border-dark;
+  border-color: $border-color-dark;
+  @include border-radius($border-radius-default);
+  border-spacing: 0;
+  border-collapse: separate;
+  box-sizing: border-box;
+  box-shadow: $box-shadow-default;
+  overflow: hidden;
+  color: $text-light;
+  margin: $margin-default;
+  font-size: $font-size-default;
+}
+
+%component-input-defaults {
+  @extend %component-defaults;
+
+  input {
+    flex-grow: 1;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    font-size: $font-size-default;
+    font-weight: $font-weight-default;
+    text-align: left;
+    background-color: transparent;
+    color: $text-light;
+    border: none;
+    line-height: $height-default;
+    outline: none;
+  }
+  input::placeholder {
+    color: $text-lighter;
+    font-weight: normal;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    background-color: transparent !important;
+  }
+}
