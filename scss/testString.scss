@@ -85,7 +85,7 @@ hey {
 
 // wrap with '' 
  @include border-radius(0.2em);
-
+ @include font-size(15px, 600, 1.33);
 
 
 // * local declarations 
@@ -110,3 +110,14 @@ $default-margin-between-check-and-content: 8px;
   border: 1px solid $default-check-padding;
   background-color: $default-check-border-radius;
 }
+
+
+
+// * local mixins
+@mixin margin-left($size) {
+}
+@include margin-left('default');
+
+@mixin margin-right($size, $color) {
+}
+@include margin-right('default', 'red');

@@ -26,6 +26,8 @@ const run = {
   mixins: true,
   localDeclarationVariables: true,
   localVariables: true,
+  localMixinsRef: true,
+  localMixins: true,
 }
 
 
@@ -140,10 +142,13 @@ if (run.mixins) {
         }
         else {
           /**
-           * * @include border-radius(0.2em);
-           * the 0.2em should be wrapped with colon ''
-           */
-          secondCaptureGroup = `'${args[2]}'`;
+             * * @include border-radius(0.2em);
+             * the 0.2em should be wrapped with colon ''
+             * there the 'large' kind of thing too
+             * remove ' from all and then wrap it with '' again
+             */
+          // the second replace() does replace , to ', ' 
+          secondCaptureGroup = `'${args[2].replace(/\'/gm, '').replace(/, /gm, '\', \'')}'`;
         }
       }
 
@@ -161,7 +166,7 @@ if (run.mixins) {
   }
 }
 
-const declared = [];
+const localVariables = [];
 // local declaration variables
 if (run.localDeclarationVariables) {
 
@@ -184,7 +189,7 @@ if (run.localDeclarationVariables) {
       const res = `const ${_.camelCase(args[1])}: '${args[2]}';`;
       console.log(`└-> ${res}\n`);
       console.groupEnd();
-      declared.push(new RegExp(escapeRegExp(args[1]), 'gm'));
+      localVariables.push(new RegExp(escapeRegExp(args[1]), 'gm'));
       return res;
     },
   });
@@ -193,13 +198,13 @@ if (run.localDeclarationVariables) {
 // local variables
 if (run.localVariables) {
   // run it only when `declared` exists
-  if (declared.length) {
+  if (localVariables.length) {
     // eslint-disable-next-line no-console
-    console.log('declared', declared);
+    console.log('declared', localVariables);
     replace({
       title: 'LOCAL',
       path,
-      from: declared,
+      from: localVariables,
       to: (match) => {
         console.group(`layout`);
 
@@ -213,6 +218,119 @@ if (run.localVariables) {
         return res3;
       },
     });
+  }
+}
+
+
+const localMixinsImplementation = [];
+// local mixins
+if (run.localMixinsRef) {
+  replace({
+    title: 'LOCAL MIXINS REF',
+    path,
+    from: /@mixin (?<m>(?:[a-zA-z\d]+-*)+)(?<m2>\(.*\)) {/gm,
+    to: (...args) => {
+
+      // @mixin height-yo($size) {
+      //   something
+      // }
+      // to
+      // const heightYo = ($size) => css`
+      //   something
+      // }
+      // ! note that the transforming from { } to css`` is not perfect, need to change the rest of it manually
+
+      // todo: add changing args[2] by removing ${} if it exists
+      console.group(`local mixins ref`)
+      // @mixin height-yo($size) {
+      console.log(`ori: ${args[0]}`);
+      // height-yo
+      console.log('args[1]', args[1]);
+      // ($size)
+      console.log('args[2]', args[2]);
+
+      const res = `const ${_.camelCase(args[1])} = ${args[2]} => css\``;
+      console.log(`└-> ${res}\n`);
+      console.groupEnd();
+      // push height-yo to use it at local mixins transforming
+      localMixinsImplementation.push(new RegExp(`@include (?<m1>${escapeRegExp(args[1])})\\((?<m2>.*)\\);`, 'gm'));
+      return res;
+    }
+  })
+}
+
+
+// local mixins
+if (run.localMixins) {
+  if (localMixinsImplementation) {
+    replace({
+      title: 'LOCAL MIXINS',
+      path,
+      from: localMixinsImplementation,
+      // * below is legacy (when localMixinRef was not there)
+      // from: readRef({
+      //   refPath: path,
+      //   regex: /@mixin (?<m>(?:[a-zA-z\d]+-*)+)/gm,
+      //   returnForm: (refs) => refs.map(ref => `@include (?<m1>${ref})\\((?<m2>.*)\\);`)
+      // }),
+      to: (...args) => {
+        // // todo: add changing args[2] by removing ${} if it exists
+        // console.group(`local mixin`)
+        // console.log(`ori: ${args[0]}`);
+        // console.log('args[1]', args[1]);
+        // console.log('args[2]', args[2]);
+
+        // const res = `\${${_.camelCase(args[1])}(${args[2]})};`;
+        // console.log(`└-> ${res}\n`);
+        // console.groupEnd();
+        // return res;
+
+        // todo: add changing args[2] by removing ${} if it exists
+        console.group(`mixin`)
+        console.log(`ori: ${args[0]}`);
+        console.log('args[1]', args[1]);
+        console.log('args[2]', args[2]);
+
+        // * check if args[2] is wrapped with ${}
+        const g1 = matchAll(args[2], /(?:\${(.*)})/gm);
+        const array = Array.from(g1); // let's turn it into array
+        let secondCaptureGroup;
+
+        if (array.length !== 0) {
+          /**
+           *  * case : ${layouts.borderRadiusXLarge}
+           * unwrap ${}
+           * layouts.borderRadiusXLarge
+           */
+          secondCaptureGroup = array[0][1];
+          console.log(' * unwrap ${} from args[2] ->', secondCaptureGroup);
+        }
+        else {
+          if (args[2].startsWith('$')) {
+            // ! this should not happen if variable(e.g. component, color) transform is done in advance
+            // * case: @include border-radius($border-radius-default);
+            secondCaptureGroup = args[2];
+          }
+          else {
+            /**
+              * * @include border-radius(0.2em);
+              * the 0.2em should be wrapped with colon ''
+              * there the 'large' kind of thing too
+              * remove ' from all and then wrap it with '' again
+              */
+            // the second replace() does replace , to ', ' 
+            secondCaptureGroup = `'${args[2].replace(/\'/gm, '').replace(/, /gm, '\', \'')}'`;
+          }
+        }
+
+        const res = `\${${_.camelCase(args[1])}(${secondCaptureGroup})};`;
+        console.log(`└-> ${res}\n`);
+        console.groupEnd();
+        return res;
+      }
+    })
+  } else {
+    console.log('NO LOCAL MIXINS DECLARED TO TRANSFORM')
   }
 }
 

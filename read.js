@@ -17,9 +17,10 @@ const readRef = ({ refPath, regex, returnForm }) => {
     // console.log(data);
 
 
+    console.log(`ref regex : ${regex}`)
     // group 'm' is the matching group
     const iter = matchAll(reference, regex);
-    1
+    
     const array = Array.from(iter); // let's turn it into array
     // console.log('array', array);
 
