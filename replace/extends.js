@@ -4,12 +4,14 @@ const replace = require('replace-in-file');
 
 const filesToChange = '/Users/dongkyun/Documents/Projects/gordonReplace/scss/testString.scss';
 
-module.exports = function runExtends({ path, refs }) {
+module.exports = function runExtends({ path, from
+ }) {
   try {
     console.group('START TO REPLACE EXTENDS');
     const replaceResult = replace.sync({
       files: path ? path : filesToChange,
-      from: refs,
+      from: from
+,
       to: (match) => {
         // todo: this may contain some error too. there is an exception
         console.group(`extends`);

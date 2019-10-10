@@ -1,11 +1,11 @@
 const replace = require('replace-in-file');
 
-module.exports = ({ title, path, refs, to }) => {
+module.exports = ({ title, path, from, to }) => {
   try {
     console.group(`START TO REPLACE ${title}`);
     const replaceResult = replace.sync({
       files: path ? path : filesToChange,
-      from: refs(),
+      from,
       to,
     })
     console.groupEnd();

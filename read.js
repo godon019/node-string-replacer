@@ -25,7 +25,7 @@ const readRef = ({ refPath, regex, returnForm }) => {
 
     // get the matching group of 'm'
     let result = array.map(el => el.groups.m);
-    // console.log(`read ${refPath}`, result);
+    console.log(`read ${refPath}`, result);
 
     result = result.map(str => escapeRegExp(str));
     // console.log('after escape: \n', result);
@@ -37,7 +37,7 @@ const readRef = ({ refPath, regex, returnForm }) => {
     }
 
     const regexStr = result.map(str => new RegExp(str, 'g'))
-    // console.log(regexStr);
+    console.log(regexStr);
 
     return regexStr;
 

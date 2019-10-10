@@ -1,5 +1,5 @@
 
-// colors
+// * colors
 $application-background-light: #ffffff;
 $border-color-dark: #d9d9d9 $border #b3b3b3;
 $poor: #ff7da5;
@@ -11,7 +11,8 @@ $dark-30: what;
   background-color: $warm-pink;
 }
 
-// extends
+
+// * extends
 .what {
   @extend .large;
 }
@@ -27,7 +28,7 @@ export const componentInputDefaults = css`
 
 
 
-// components
+// * components
 // redundant test
 $height-default: 34px;
 $height-default: 34px;
@@ -71,11 +72,11 @@ $dropdown-item-padding: 0 30px;
 
 
 
-// mixins
+// * mixins
 hey {
   // this shouldn't be changed
   border-radius: 30px;
-  // it should be changed
+  // it should be changed, not unwrap(but ths has been changed before)
   @include border-radius($border-radius-default);
 
   // unwrap second argument test
@@ -84,3 +85,28 @@ hey {
 
 // wrap with '' 
  @include border-radius(0.2em);
+
+
+
+// * local declarations 
+
+// change below
+$vertical-margin: 20px;
+$default-check-padding: 2em;
+$default-check-border-radius: 2rem;
+$default-margin-between-check-and-content: 8px;
+
+// * local variables
+
+// ! don't change coz not in `declared[]`
+&.danger {
+  color: $vertical-mar324-123;
+  border: 1px solid $default-check-pa1234dding-412;
+  background-color: $default-check-borqefewder-radius-123;
+}
+// change
+&.danger {
+  color: $vertical-margin;
+  border: 1px solid $default-check-padding;
+  background-color: $default-check-border-radius;
+}

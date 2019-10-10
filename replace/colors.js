@@ -6,13 +6,15 @@ const filesToChange = '/Users/dongkyun/Documents/Projects/gordonReplace/scss/tes
 // const filesToChange = './scss/testString.scss';
 // const filesToChange = '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/stylesNew/componentsClass.scss';
 
-module.exports = function runColor({ path, refs }) {
+module.exports = function runColor({ path, from
+ }) {
   try {
     console.group('START TO REPLACE COLOR VARIABLES');
     const replaceResult = replace.sync({
       files: path ? path : filesToChange,
       // from: /hey/g,
-      from: refs(),
+      from: from
+(),
       to: (match) => {
         console.group(`color`);
         const res1 = match.replace('$', '');

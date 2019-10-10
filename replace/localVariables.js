@@ -4,12 +4,14 @@ const replace = require('replace-in-file');
 
 const filesToChange = '/Users/dongkyun/Documents/Projects/gordonReplace/scss/testString.scss';
 
-module.exports = function runComponents({ path, refs }) {
+module.exports = function runComponents({ path, from
+ }) {
   try {
     console.group('START TO REPLACE LOCAL VARIABLES');
     const replaceResult = replace.sync({
       files: path ? path : filesToChange,
-      from: refs,
+      from: from
+,
       to: (match) => {
         console.group(`layout`);
         const res1 = match.replace('$', '');

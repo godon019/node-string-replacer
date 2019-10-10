@@ -8,12 +8,14 @@ const filesToChange = '/Users/dongkyun/Documents/Projects/gordonReplace/scss/tes
 // const filesToChange = './scss/testString.scss';
 // const filesToChange = '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/stylesNew/componentsClass.scss';
 
-module.exports = function runMixins({ path, refs }) {
+module.exports = function runMixins({ path, from
+ }) {
   try {
     console.group('START TO REPLACE COLOR VARIABLES');
     const replaceResult = replace.sync({
       files: path ? path : filesToChange,
-      from: refs,
+      from: from
+,
       // dry: true,
       to: (...args) => {
         // todo: add changing args[2] by removing ${} if it exists
