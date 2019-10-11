@@ -8,7 +8,7 @@ const matchAll = require('string.prototype.matchall');
 
 const { escapeRegExp } = require('./regexUtil.js');
 
-const readRef = ({ refPath, regex, returnForm }) => {
+const readRef = ({ refPath, regex, returnForm, verbose }) => {
   try {
     // copy file path: option cmd c
     // * `reference` is an reference file. which means, those matching from here is being used to change the related strings in actual files
@@ -28,16 +28,20 @@ const readRef = ({ refPath, regex, returnForm }) => {
     let result = array.map(el => el.groups.m);
     console.log(`read ${refPath}`, result);
 
+    
+    // console.log('before escape', result);
+    // * str will be $primary-color
     result = result.map(str => escapeRegExp(str));
-    // console.log('after escape: \n', result);
-
+    // * str will be \\$primary-color
+    // console.log('after escape', result);
+    
     if (returnForm !== undefined) {
       // console.log(`set up return forms: \n`);
       result = returnForm(result);
-      // console.log(result);
     }
-
+    
     const regexStr = result.map(str => new RegExp(str, 'g'))
+    // * after new RegExp() str is \$primary-color
     console.log(regexStr);
 
     return regexStr;

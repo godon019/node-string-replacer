@@ -30,6 +30,10 @@ const run = {
   localMixins: true,
 }
 
+// make sure to use escape with \ one more time
+// this function will remove the bug of
+// light}er type transformation
+const matchExactVariable = (refs) => refs.map(ref => `${ref}(?![\\w\\d-])`);
 
 // color
 if (run.color) replace({
@@ -38,12 +42,15 @@ if (run.color) replace({
   from: readRef({
     refPath: './references/colors.scss',
     regex: new RegExp(sassVarCase, 'gm'),
+    returnForm: matchExactVariable,
   }),
   to: (match) => {
     console.group(`color`);
     const res1 = match.replace('$', '');
     const res2 = _.camelCase(res1);
     const res3 = `\${({ theme }) => theme.colors.${res2}}`
+    // const res3 = `\${({ theme: { colors } }) => colors.${res2}}`
+
     console.log(`ori: ${match} \n└-> ${res3}\n`);
     console.groupEnd();
     return res3;
@@ -58,6 +65,7 @@ if (run.components) {
     from: readRef({
       refPath: './references/components.scss',
       regex: new RegExp(sassVarCase, 'gm'),
+      returnForm: matchExactVariable,
     }),
     to: (match) => {
       console.group(`layout`);
@@ -111,6 +119,7 @@ if (run.mixins) {
       refPath: './references/mixins.scss',
       // this is a bit different fro kebab-case 
       regex: /@mixin (?<m>(?:[a-zA-z\d]+-*)+)/gm,
+      // make sure to use escape with \ one more time
       returnForm: (refs) => refs.map(ref => `@include (?<m1>${ref})\\((?<m2>.*)\\);`)
     }),
     to: (...args) => {
@@ -141,14 +150,18 @@ if (run.mixins) {
           secondCaptureGroup = args[2];
         }
         else {
-          /**
-             * * @include border-radius(0.2em);
-             * the 0.2em should be wrapped with colon ''
-             * there the 'large' kind of thing too
-             * remove ' from all and then wrap it with '' again
-             */
-          // the second replace() does replace , to ', ' 
-          secondCaptureGroup = `'${args[2].replace(/\'/gm, '').replace(/, /gm, '\', \'')}'`;
+          if (!args[2]) {
+            secondCaptureGroup = ''
+          } else {
+            /**
+               * * @include border-radius(0.2em);
+               * the 0.2em should be wrapped with colon ''
+               * there the 'large' kind of thing too
+               * remove ' from all and then wrap it with '' again
+               */
+            // the second replace() does replace , to ', ' 
+            secondCaptureGroup = `'${args[2].replace(/\'/gm, '').replace(/, /gm, '\', \'')}'`;
+          }
         }
       }
 
@@ -205,6 +218,7 @@ if (run.localVariables) {
       title: 'LOCAL',
       path,
       from: localVariables,
+      returnForm: matchExactVariable,
       to: (match) => {
         console.group(`layout`);
 
@@ -223,7 +237,7 @@ if (run.localVariables) {
 
 
 const localMixinsImplementation = [];
-// local mixins
+// local mixins declaration
 if (run.localMixinsRef) {
   replace({
     title: 'LOCAL MIXINS REF',
@@ -267,12 +281,6 @@ if (run.localMixins) {
       title: 'LOCAL MIXINS',
       path,
       from: localMixinsImplementation,
-      // * below is legacy (when localMixinRef was not there)
-      // from: readRef({
-      //   refPath: path,
-      //   regex: /@mixin (?<m>(?:[a-zA-z\d]+-*)+)/gm,
-      //   returnForm: (refs) => refs.map(ref => `@include (?<m1>${ref})\\((?<m2>.*)\\);`)
-      // }),
       to: (...args) => {
         // // todo: add changing args[2] by removing ${} if it exists
         // console.group(`local mixin`)
@@ -334,5 +342,3 @@ if (run.localMixins) {
   }
 }
 
-        // runMixins();
-        // runExtends();
