@@ -32,10 +32,10 @@ const run = {
   components: true,
   extends: true,
   mixins: true,
-  // localDeclarationVariables: true,
-  // localVariables: true,
-  // localMixinsRef: true,
-  // localMixins: true,
+  localDeclarationVariables: true,
+  localVariables: true,
+  localMixinsRef: true,
+  localMixins: true,
 }
 
 // make sure to use escape with \ one more time
