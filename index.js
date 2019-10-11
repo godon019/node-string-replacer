@@ -6,17 +6,25 @@ const { escapeRegExp } = require('./regexUtil.js');
 const addImport = require('./addImport');
 const readRef = require('./read');
 const replace = require('./replace');
-const argv = require('yargs').argv
+const argv = require('yargs').argv;
+const path = require('path');
+const fs = require('fs');
 
-// eslint-disable-next-line no-console
 console.log('argv', argv);
 
-const path =
+const originalPath =
   argv.path;
 // '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/components/Checkbox/Checkbox.scss';
 // '/Users/dongkyun/Documents/Projects/gordonReplace/scss/testString.scss';
 
+const savePath = path.dirname(originalPath) + '/styled.ts';
+
+// generally used type
 const sassVarCase = /(?<m>\$(?:[a-z\d]+-*)+)/;
+
+// destination.txt will be created or overwritten by default.
+fs.copyFileSync(originalPath, savePath);
+console.log(`${originalPath} was copied to ${savePath}`);
 
 // the order matters
 const run = {
@@ -38,7 +46,7 @@ const matchExactVariable = (refs) => refs.map(ref => `${ref}(?![\\w\\d-])`);
 // color
 if (run.color) replace({
   title: 'COLOR',
-  path,
+  path: savePath,
   from: readRef({
     refPath: './references/colors.scss',
     regex: new RegExp(sassVarCase, 'gm'),
@@ -61,7 +69,7 @@ if (run.color) replace({
 if (run.components) {
   replace({
     title: 'COMPONENTS(LAYOUT)',
-    path,
+    path: savePath,
     from: readRef({
       refPath: './references/components.scss',
       regex: new RegExp(sassVarCase, 'gm'),
@@ -85,7 +93,7 @@ if (run.components) {
 if (run.extends) {
   if (replace({
     title: 'EXTENDS',
-    path,
+    path: savePath,
     from: [/\@extend %page-index/g, /\@extend %component-defaults/g, /\@extend %component-input-defaults/g],
     to: (match) => {
       // todo: this may contain some error too. there is an exception
@@ -99,7 +107,7 @@ if (run.extends) {
     },
   })) {
     addImport({
-      refPath: path,
+      refPath: savePath,
       strToCheck: `import * as extends from`,
       strToAppend: `import * as extends from '../../stylesNew/components/extends';`
     })
@@ -110,7 +118,7 @@ if (run.extends) {
 if (run.mixins) {
   if (replace({
     title: 'MIXINS',
-    path,
+    path: savePath,
     from: readRef({
       refPath: './references/mixins.scss',
       // this is a bit different fro kebab-case 
@@ -168,7 +176,7 @@ if (run.mixins) {
     }
   })) {
     addImport({
-      refPath: path,
+      refPath: savePath,
       strToCheck: `import * as mixins from`,
       strToAppend: `import * as mixins from '../../stylesNew/mixins';`
     })
@@ -181,7 +189,7 @@ if (run.localDeclarationVariables) {
 
   replace({
     title: 'LOCAL DECLARAION VARIABLES',
-    path,
+    path: savePath,
     /**
      * $vertical-margin: 20px;
      * $default-check-padding: 2em;
@@ -212,7 +220,7 @@ if (run.localVariables) {
     console.log('declared', localVariables);
     replace({
       title: 'LOCAL',
-      path,
+      path: savePath,
       from: localVariables,
       returnForm: matchExactVariable,
       to: (match) => {
@@ -237,7 +245,7 @@ const localMixinsImplementation = [];
 if (run.localMixinsRef) {
   replace({
     title: 'LOCAL MIXINS REF',
-    path,
+    path: savePath,
     from: /@mixin (?<m>(?:[a-zA-z\d]+-*)+)(?<m2>\(.*\)) {/gm,
     to: (...args) => {
 
@@ -275,7 +283,7 @@ if (run.localMixins) {
   if (localMixinsImplementation) {
     replace({
       title: 'LOCAL MIXINS',
-      path,
+      path: savePath,
       from: localMixinsImplementation,
       to: (...args) => {
         // // todo: add changing args[2] by removing ${} if it exists
@@ -338,3 +346,8 @@ if (run.localMixins) {
   }
 }
 
+addImport({
+  refPath: savePath,
+  strToCheck: `import styled`,
+  strToAppend: `import styled, { css } from 'styled-components';`
+})
