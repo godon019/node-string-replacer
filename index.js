@@ -48,7 +48,7 @@ if (run.color) replace({
     console.group(`color`);
     const res1 = match.replace('$', '');
     const res2 = _.camelCase(res1);
-    const res3 = `\${({ theme }) => theme.colors.${res2}}`
+    const res3 = `\${({ theme }): string => theme.colors.${res2}}`
     // const res3 = `\${({ theme: { colors } }) => colors.${res2}}`
 
     console.log(`ori: ${match} \n└-> ${res3}\n`);
@@ -57,9 +57,9 @@ if (run.color) replace({
   },
 });
 
-// components (layout)
+// components (layouts)
 if (run.components) {
-  if (replace({
+  replace({
     title: 'COMPONENTS(LAYOUT)',
     path,
     from: readRef({
@@ -71,18 +71,14 @@ if (run.components) {
       console.group(`layout`);
       const res1 = match.replace('$', '');
       const res2 = _.camelCase(res1);
-      const res3 = `\${layouts.${res2}}`
+      // const res3 = `\${layouts.${res2}}`
+      const res3 = `\${({ theme }): string => theme.layouts.${res2}}`
+
       console.log(`ori: ${match} \n└-> ${res3}\n`);
       console.groupEnd();
       return res3;
     },
-  })) {
-    addImport({
-      refPath: path,
-      strToCheck: `import { layouts } from`,
-      strToAppend: `import { layouts } from '../../stylesNew/components/variables';`
-    })
-  };
+  })
 }
 
 // extends
