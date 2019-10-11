@@ -17,7 +17,7 @@ const originalPath =
 // '/Users/dongkyun/Documents/Projects/wi-new-dashboard/src/components/Checkbox/Checkbox.scss';
 // '/Users/dongkyun/Documents/Projects/gordonReplace/scss/testString.scss';
 
-const savePath = path.dirname(originalPath) + '/styled.ts';
+const savePath = path.dirname(originalPath) + '/styles.ts';
 
 // generally used type
 const sassVarCase = /(?<m>\$(?:[a-z\d]+-*)+)/;
@@ -32,10 +32,10 @@ const run = {
   components: true,
   extends: true,
   mixins: true,
-  localDeclarationVariables: true,
-  localVariables: true,
-  localMixinsRef: true,
-  localMixins: true,
+  // localDeclarationVariables: true,
+  // localVariables: true,
+  // localMixinsRef: true,
+  // localMixins: true,
 }
 
 // make sure to use escape with \ one more time
@@ -145,7 +145,7 @@ if (run.mixins) {
          * layouts.borderRadiusXLarge
          */
         secondCaptureGroup = array[0][1];
-        console.log(' * unwrap ${} from args[2] ->', secondCaptureGroup);
+        console.log(' * unwrap ${} from args[2] to ->', secondCaptureGroup);
       }
       else {
         if (args[2].startsWith('$')) {
@@ -155,6 +155,8 @@ if (run.mixins) {
         }
         else {
           if (!args[2]) {
+            // if argument was empty then stay empty
+            // user-select-none() => user-select-none()
             secondCaptureGroup = ''
           } else {
             /**
@@ -169,7 +171,39 @@ if (run.mixins) {
         }
       }
 
-      const res = `\${mixins.${_.camelCase(args[1])}(${secondCaptureGroup})};`;
+      let res
+
+      console.group('check if it has \'({ theme }\): string =>\'');
+      const matchTheme = matchAll(secondCaptureGroup, /(?<m1>\({ theme }\): string => )(?<m2>.+)/gm);
+      const matchThemeArray = Array.from(matchTheme);
+
+      if (matchThemeArray.length !== 0) {
+        // * case: ${mixins.borderRadius(({ theme }): string => theme.layouts.borderRadiusDefault)};
+        // that should be like
+        // * return:  ${({ theme }): string => mixins.borderRadius(theme.layouts.borderRadiusDefault)};
+        // assume the unwrapping ${} function has already done
+        // args[1]: border-radius
+        // secondCaptureGroup: ({ theme }): string => theme.layouts.borderRadiusDefault
+        // so
+        // <func1>
+        // check if secondCaptureGroup has ({ theme }): string =>
+        // seperate into thirdCaptureGroup as  ({ theme }): string =>
+        // seperate into fourthCaptureGroup as  theme.layouts.borderRadiusDefault
+        // replace `string` on thirdCaptueGroup to `FlattenSimpleInterpolation`
+        // <end of func1>
+
+        const thirdCaptureGroup = matchThemeArray[0].groups.m1.replace('string', 'FlattenSimpleInterpolation');
+        const fourthCaptureGroup = matchThemeArray[0].groups.m2;
+        console.log(`thirdCaptureGroup : '${thirdCaptureGroup}'`)
+        console.log(`fourthCaptureGroup : '${fourthCaptureGroup}'`)
+
+        res = `\${${thirdCaptureGroup}mixins.${_.camelCase(args[1])}(${fourthCaptureGroup})};`;
+
+      } else {
+        res = `\${mixins.${_.camelCase(args[1])}(${secondCaptureGroup})};`;
+      }
+      console.groupEnd();
+
       console.log(`└-> ${res}\n`);
       console.groupEnd();
       return res;
@@ -349,5 +383,5 @@ if (run.localMixins) {
 addImport({
   refPath: savePath,
   strToCheck: `import styled`,
-  strToAppend: `import styled, { css } from 'styled-components';`
+  strToAppend: `import styled, { FlattenSimpleInterpolation, css } from 'styled-components';`
 })
