@@ -237,7 +237,7 @@ if (run.localDeclarationVariables) {
       console.log('args[1]', args[1]);
       console.log('args[2]', args[2]);
 
-      const res = `const ${_.camelCase(args[1])}: '${args[2]}';`;
+      const res = `const ${_.camelCase(args[1])} = '${args[2]}';`;
       console.log(`└-> ${res}\n`);
       console.groupEnd();
       localVariables.push(new RegExp(escapeRegExp(args[1]), 'gm'));
