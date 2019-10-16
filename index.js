@@ -108,8 +108,8 @@ if (run.extends) {
   })) {
     addImport({
       refPath: savePath,
-      strToCheck: `import * as extends from`,
-      strToAppend: `import * as extends from '../../stylesNew/components/extends';`
+      strToCheck: `import * as styleExtends from`,
+      strToAppend: `import * as styleExtends from '../../stylesNew/components/extends';`
     })
   }
 }
